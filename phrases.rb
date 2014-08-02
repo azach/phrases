@@ -35,7 +35,7 @@ class Phrases
       phrase = []
       f.each_char do |char|
         if char == SEPARATOR || f.eof?
-          trie.add(phrase.join)
+          trie.add(phrase.join.strip)
           phrase.clear
         else
           phrase << char
