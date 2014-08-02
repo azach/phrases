@@ -55,6 +55,7 @@ class Phrases
   end
 
   def add(phrase)
+    return if exists?(phrase)
     trie.add(phrase)
     append_to_file(phrase)
   end

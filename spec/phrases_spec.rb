@@ -60,18 +60,27 @@ describe Phrases do
   end
 
   describe '#add' do
-    subject { phrases.add(word) }
-    let(:word) { 'another phrase' }
+    subject { phrases.add(phrase) }
+    let(:phrase) { 'another phrase' }
 
     before { phrases.stub(append_to_file: true) }
 
-    it 'adds the word to the trie' do
-      expect { subject }.to change { phrases.exists?(word) }.from(false).to(true)
+    it 'adds the phrase to the trie' do
+      expect { subject }.to change { phrases.exists?(phrase) }.from(false).to(true)
     end
 
-    it 'adds the word to the file' do
-      phrases.should_receive(:append_to_file).with(word)
+    it 'adds the phrase to the file' do
+      phrases.should_receive(:append_to_file).with(phrase)
       subject
+    end
+
+    context 'if a phrase already exists' do
+      let(:phrase) { 'phrase 1' }
+
+      it 'does not add the phrase again' do
+        phrases.should_not_receive(:append_to_file).with(phrase)
+        subject
+      end
     end
   end
 

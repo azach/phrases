@@ -10,3 +10,9 @@ get '/api/phrase.json' do
   content_type :json
   {phrase: Phrases.get(params[:search])}.to_json
 end
+
+post '/api/phrase.json' do
+  return 400 unless params[:phrase] && !params[:phrase].empty?
+  Phrases.add(params[:phrase])
+  {phrase: params[:phrase]}.to_json
+end
