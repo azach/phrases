@@ -1,8 +1,6 @@
 require 'rambling-trie'
 
 class Phrases
-  extend Forwardable
-
   SEPARATOR = '|'
 
   def self.initialize_phrases(file_path)
