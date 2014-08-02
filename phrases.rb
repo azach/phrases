@@ -70,7 +70,7 @@ class Phrases
   private
 
   def append_to_file(phrase)
-    File.open(file_path, 'a') { |f| f << [SEPARATOR, phrase].join }
+    File.open(file_path, 'w') { |f| f.write [SEPARATOR, phrase].join }
   end
 
   attr_reader :file_path, :trie
