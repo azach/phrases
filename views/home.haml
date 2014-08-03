@@ -1,0 +1,23 @@
+- if !!session['logged_in']
+  .phrases
+    #current-phrase.phrase ...
+    %input{id: 'get-phrase', type: 'button', value: 'Get a Phrase'}
+
+  .phrases
+    #phrase-added.phrase ...
+    %input{id: 'add-phrase-value', type: 'text', required: true}
+    %br
+    %input{id: 'add-phrase', type: 'button', value: 'Add a Phrase'}
+
+  .phrases
+    #phrase-status.phrase ...
+    %input{id: 'find-phrase-value', type: 'text', required: true}
+    %br
+    %input{id: 'find-phrase', type: 'button', value: 'Find a Phrase'}
+
+- else
+  #login-required
+    %h2
+      Please
+      %a{href: '/login'} login
+      to use Phrases

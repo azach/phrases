@@ -1,0 +1,11 @@
+%script{type: 'text/javascript', src: '//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'}
+%script{type: 'text/javascript', src: '/javascripts/application.js'}
+%link{rel: 'text/css', rel: 'stylesheet', href: '/stylesheets/application.css'}
+
+#header
+  - if !!session['logged_in']
+    %a{href: '/logout'} Logout
+  %h1.title Phrases
+
+#content
+  = yield

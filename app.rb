@@ -1,4 +1,4 @@
-require 'erb'
+require 'haml'
 require 'sinatra'
 require 'json'
 require 'warden'
@@ -13,7 +13,7 @@ class PhrasesApp < Sinatra::Base
   Phrases.initialize_phrases(CONF['phrases_file_path'])
 
   get '/' do
-    'Welcome to Phrases!'
+    haml :home
   end
 
   get '/login' do

@@ -2,6 +2,8 @@ GEM
   specs:
     coderay (1.1.0)
     diff-lcs (1.2.5)
+    haml (4.0.3)
+      tilt
     method_source (0.8.2)
     pry (0.10.0)
       coderay (~> 1.1.0)
@@ -32,6 +34,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  haml (= 4.0.3)
   pry (~> 0.10)
   rambling-trie (= 0.6.1)
   rspec (~> 2.14)
