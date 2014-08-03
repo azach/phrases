@@ -63,11 +63,24 @@ class Phrases
   def sample
     node = @trie.children.sample
     return nil unless node
-    node = node.children.sample while !node.terminal?
+    node = node.children.sample until stop_at_node?(node)
     node.as_word
   end
 
   private
+
+  # Since a trie can have multiple levels with terminating nodes,
+  # this method allows each level to have an equal chance of either
+  # stopping at a terminal node or continuing down one of the branches
+  def stop_at_node?(node)
+    return false unless node.terminal?
+    return true if node.children.none?
+    rand(0..leaf_count(node)) == 0
+  end
+
+  def leaf_count(node)
+    node.children.select(&:terminal?).count + node.children.map { |n| leaf_count(n) }.reduce(&:+).to_i
+  end
 
   def append_to_file(phrase)
     File.open(file_path, 'a') { |f| f.write [SEPARATOR, phrase].join }
