@@ -8,10 +8,22 @@ require_relative 'phrases'
 class PhrasesApp < Sinatra::Base
   CONF = YAML.load(File.read(File.join(File.expand_path(File.dirname(__FILE__)), 'conf.yml')))
 
+  enable :sessions
+
   Phrases.initialize_phrases(CONF['phrases_file_path'])
 
   get '/' do
     'Welcome to Phrases!'
+  end
+
+  get '/login' do
+    session['logged_in'] = true
+    redirect '/'
+  end
+
+  get '/logout' do
+    session['logged_in'] = nil
+    redirect '/'
   end
 
   post '/unauthenticated/?' do
@@ -20,7 +32,7 @@ class PhrasesApp < Sinatra::Base
   end
 
   before '/api/*' do
-    request.env['warden'].authenticate!(:access_token)
+    request.env['warden'].authenticate!
   end
 
   get '/api/phrase.json' do
@@ -39,10 +51,11 @@ class PhrasesApp < Sinatra::Base
   end
 
   use Warden::Manager do |config|
-    config.scope_defaults :default, strategies: [:access_token]
+    config.scope_defaults :default, strategies: [:session, :access_token]
     config.failure_app = self
   end
 
+  # Authentication strategy for non-session based clients (e.g. mobile app)
   Warden::Strategies.add(:access_token) do
     def valid?
       request.env['HTTP_ACCESS_TOKEN'].is_a?(String)
@@ -50,7 +63,17 @@ class PhrasesApp < Sinatra::Base
 
     def authenticate!
       access_granted = (request.env['HTTP_ACCESS_TOKEN'] == CONF['access_token'])
-      !access_granted ? fail! : success!(access_granted)
+      access_granted ? success!(true) : fail!
+    end
+  end
+
+  Warden::Strategies.add(:session) do
+    def valid?
+      !!session['logged_in']
+    end
+
+    def authenticate!
+      !!session['logged_in'] ? success!(true) : fail!
     end
   end
 end
